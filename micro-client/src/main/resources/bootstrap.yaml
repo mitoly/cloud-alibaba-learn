@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: micro-client
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 127.0.0.1:8080
+      # 持久化到nacos
+      datasource:
+        ds:
+          nacos:
+            server-addr: localhost:8848
+            data-id: micro-client-sentinel
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+server:
+  port: 9092

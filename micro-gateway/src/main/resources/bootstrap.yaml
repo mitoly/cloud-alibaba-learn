@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: micro-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        file-extension: yarm
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: micro-server
+          # lb为负载均衡固定写法
+          uri: lb://micro-server
+          predicates:
+          - Path=/ms/**
+          filters:
+          # 去除拼接的路由
+          - StripPrefix=1
+
+        - id: micro-client
+          uri: lb://micro-client
+          predicates:
+          - Path=/mc/**
+          filters:
+          - StripPrefix=1
+
+        - id: test-baidu
+          uri: https://www.baidu.com
+          predicates:
+          - Path=/bd/**
+          filters:
+          - StripPrefix=1
+    sentinel:
+      filter:
+        enabled: false
+      transport:
+        port: 8719
+        dashboard: 127.0.0.1:8080
+
+server:
+  port: 9090
